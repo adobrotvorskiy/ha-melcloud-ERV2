@@ -8,6 +8,7 @@ CONF_LANGUAGE = "language"
 ATTR_STATUS = "status"
 ATTR_VANE_VERTICAL = "vane_vertical"
 ATTR_VANE_HORIZONTAL = "vane_horizontal"
+ATTR_ERV_MODE = "erv_mode"
 
 
 class HorSwingModes:
@@ -34,6 +35,13 @@ class VertSwingModes:
     Bottom = "VerticalBottom"
     Swing = "VerticalSwing"
 
+class ErvModes:
+    """Energy recovery ventilation modes names."""
+
+    Auto = "Auto"
+    Recovery = "Recovery"
+    ByPass = "ByPass"
+    Undefined = "Undefined"
 
 class Language:
     """Melcloud languages."""

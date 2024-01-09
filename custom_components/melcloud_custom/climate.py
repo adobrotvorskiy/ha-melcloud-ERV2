@@ -3,9 +3,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from pymelcloud import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, AtaDevice, AtwDevice
+from pymelcloud import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, DEVICE_TYPE_ERV, AtaDevice, AtwDevice, ErvDevice
 import pymelcloud.ata_device as ata
 import pymelcloud.atw_device as atw
+import pymelcloud.erv_device as erv
 from pymelcloud.atw_device import (
     PROPERTY_ZONE_1_OPERATION_MODE,
     PROPERTY_ZONE_2_OPERATION_MODE,
@@ -31,10 +32,12 @@ from .const import (
     ATTR_STATUS,
     ATTR_VANE_HORIZONTAL,
     ATTR_VANE_VERTICAL,
+    ATTR_ERV_MODE,
     DOMAIN,
     MEL_DEVICES,
     HorSwingModes,
     VertSwingModes,
+    ErvModes,
 )
 
 ATA_HVAC_MODE_LOOKUP: dict[str, HVACMode] = {
@@ -86,6 +89,15 @@ ATW_ZONE_HVAC_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
     v: k for k, v in ATW_ZONE_HVAC_MODE_LOOKUP.items()
 }
 
+ERV_MODE_LOOKUP: dict[str, HVACMode] = {
+    erv.VENTILATION_MODE_RECOVERY: HVACMode.HEAT_COOL,
+    erv.VENTILATION_MODE_AUTO: HVACMode.AUTO,
+    erv.VENTILATION_MODE_BYPASS: HVACMode.FAN_ONLY,
+}
+ERV_MODE_LOOKUP_REVERSE_LOOKUP: dict[HVACMode, str] = {
+    v: k for k, v in ERV_MODE_LOOKUP.items()
+}
+
 
 async def async_setup_entry(
     hass: HomeAssistantType, entry: ConfigEntry, async_add_entities
@@ -104,6 +116,12 @@ async def async_setup_entry(
             AtwDeviceZoneClimate(mel_device, mel_device.device, zone)
             for mel_device in mel_devices[DEVICE_TYPE_ATW]
             for zone in mel_device.device.zones
+        ]
+    )
+    entities.extend(
+        [
+            ErvDeviceClimate(mel_device, mel_device.device)
+            for mel_device in mel_devices[DEVICE_TYPE_ERV]
         ]
     )
     async_add_entities(entities, True)
@@ -398,3 +416,80 @@ class AtwDeviceZoneClimate(MelCloudClimate):
         await self._zone.set_target_temperature(
             kwargs.get("temperature", self.target_temperature)
         )
+
+
+class ErvDeviceClimate(MelCloudClimate):
+    """Energy recovery ventilation device."""
+
+    def __init__(self, device: MelCloudDevice, erv_device: ErvDevice):
+        """Initialize the climate."""
+        super().__init__(device)
+        self._device = erv_device
+        self._attr_unique_id = f"{erv_device.serial}-{erv_device.mac}"
+        self._attr_device_info = device.device_info
+
+
+ #   @property
+ #   def extra_state_attributes(self) -> dict[str, Any] | None:
+ #       """Return the optional state attributes with device specific additions."""
+ #       attr = {}
+
+ #       erv_mode = self._device.erv_mode
+ #       if erv_mode:
+ #           attr.update(
+ #               {ATTR_ERV_MODE: ERV_MODE_LOOKUP.get(erv_mode, None)}
+ #           )
+
+ #       return attr
+
+    @property
+    def hvac_mode(self) -> HVACMode:
+        """R
+        eturn erv mode."""
+        op_mode = self._device.operation_mode
+        if not self._device.power or op_mode is None:
+            return HVACMode.OFF
+        return ERV_MODE_LOOKUP.get(op_mode, HVACMode.AUTO)
+
+    def _apply_set_hvac_mode(
+        self, hvac_mode: HVACMode, set_dict: dict[str, Any]
+    ) -> None:
+        """Apply hvac mode changes to a dict used to call _device.set."""
+        if hvac_mode == HVACMode.OFF:
+            set_dict[PROPERTY_POWER] = False
+            return
+
+        operation_mode = ERV_MODE_REVERSE_LOOKUP.get(hvac_mode)
+        if operation_mode is None:
+            raise ValueError(f"Invalid hvac_mode [{hvac_mode}]")
+
+        set_dict[erv.PROPERTY_VENTILATION_MODE] = operation_mode
+        if self.hvac_mode == HVACMode.OFF:
+            set_dict[PROPERTY_POWER] = True
+
+    async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
+        """Set new target hvac mode."""
+        set_dict = {}
+        self._apply_set_hvac_mode(hvac_mode, set_dict)
+        await self.api.async_set(set_dict)
+
+    @property
+    def hvac_modes(self) -> list[HVACMode]:
+        """Return the list of available hvac operation modes."""
+        return [HVACMode.OFF] + [
+            ERV_MODE_MODE_LOOKUP.get(mode) for mode in self._device.operation_modes
+        ]
+
+    @property
+    def fan_mode(self) -> str | None:
+        """Return the fan setting."""
+        return self._device.fan_speed
+
+    async def async_set_fan_mode(self, fan_mode: str) -> None:
+        """Set new target fan mode."""
+        await self.api.async_set({erv.PROPERTY_FAN_SPEED: fan_mode})
+
+    @property
+    def fan_modes(self) -> list[str] | None:
+        """Return the list of available fan modes."""
+        return self._device.fan_speeds

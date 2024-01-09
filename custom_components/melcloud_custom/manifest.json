@@ -7,6 +7,6 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ollo69/ha-melcloud-custom/issues",
-  "requirements": ["pymelcloud==2.5.8"],
+  "requirements": ["pymelcloud @ git+https://github.com/adobrotvorskiy/pymelcloud"],
   "version": "0.3.1"
 }

@@ -94,7 +94,7 @@ ERV_MODE_LOOKUP: dict[str, HVACMode] = {
     erv.VENTILATION_MODE_AUTO: HVACMode.AUTO,
     erv.VENTILATION_MODE_BYPASS: HVACMode.FAN_ONLY,
 }
-ERV_MODE_LOOKUP_REVERSE_LOOKUP: dict[HVACMode, str] = {
+ERV_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
     v: k for k, v in ERV_MODE_LOOKUP.items()
 }
 

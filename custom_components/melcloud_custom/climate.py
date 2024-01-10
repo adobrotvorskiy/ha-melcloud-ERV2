@@ -477,7 +477,7 @@ class ErvDeviceClimate(MelCloudClimate):
     def hvac_modes(self) -> list[HVACMode]:
         """Return the list of available hvac ventilation_modes."""
         return [HVACMode.OFF] + [
-            ERV_MODE_MODE_LOOKUP.get(mode) for mode in self._device.ventilation_modes
+            ERV_MODE_LOOKUP.get(mode) for mode in self._device.ventilation_modes
         ]
 
     @property

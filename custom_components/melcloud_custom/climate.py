@@ -446,7 +446,7 @@ class ErvDeviceClimate(MelCloudClimate):
     def hvac_mode(self) -> HVACMode:
         """R
         eturn erv mode."""
-        op_mode = self._device.operation_mode
+        op_mode = self._device.ventilation_mode
         if not self._device.power or op_mode is None:
             return HVACMode.OFF
         return ERV_MODE_LOOKUP.get(op_mode, HVACMode.AUTO)
@@ -463,7 +463,7 @@ class ErvDeviceClimate(MelCloudClimate):
         if operation_mode is None:
             raise ValueError(f"Invalid hvac_mode [{hvac_mode}]")
 
-        set_dict[erv.PROPERTY_VENTILATION_MODE] = operation_mode
+        set_dict[erv.PROPERTY_VENTILATION_MODE] = ventilation_mode
         if self.hvac_mode == HVACMode.OFF:
             set_dict[PROPERTY_POWER] = True
 
@@ -475,9 +475,9 @@ class ErvDeviceClimate(MelCloudClimate):
 
     @property
     def hvac_modes(self) -> list[HVACMode]:
-        """Return the list of available hvac operation modes."""
+        """Return the list of available hvac ventilation_modes."""
         return [HVACMode.OFF] + [
-            ERV_MODE_MODE_LOOKUP.get(mode) for mode in self._device.operation_modes
+            ERV_MODE_MODE_LOOKUP.get(mode) for mode in self._device.ventilation_modes
         ]
 
     @property

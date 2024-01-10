@@ -179,6 +179,17 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
         enabled=lambda x: True,
         entity_registry_enabled_default=False,
     ),
+    MelcloudSensorEntityDescription(
+        key="outside_temperature",
+        name="Outside Temperature",
+        icon="mdi:thermometer",
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda x: x.device.outside_temperature,
+        enabled=lambda x: True,
+        entity_registry_enabled_default=False,
+    ),
 )
 
 

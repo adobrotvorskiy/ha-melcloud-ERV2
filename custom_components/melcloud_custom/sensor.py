@@ -197,7 +197,7 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
 #        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
 #        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda x: x.actual_supply_fan_speed,
+        value_fn=lambda x: x.device.actual_supply_fan_speed,
         enabled=lambda x: True,
         entity_registry_enabled_default=True,
     ),

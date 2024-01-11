@@ -99,10 +99,10 @@ ERV_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
 }
 
 ERV_FAN_MODE_LOOKUP: dict[int, str] = {
-    1: FAN_LOW,
-    2: FAN_MEDIUM,
-    3: FAN_HIGHT,
-    4: FAN_MAXIMUM,
+    1: "FAN_LOW",
+    2: "FAN_MEDIUM",
+    3: "FAN_HIGHT",
+    4: "FAN_MAXIMUM",
 }
 ERV_FAN_MODE_REVERSE_LOOKUP: dict[str, int] = {
     v: k for k, v in ERV_FAN_MODE_LOOKUP.items()

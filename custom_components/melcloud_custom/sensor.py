@@ -166,7 +166,7 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda x: x.wifi_signal,
         enabled=lambda x: True,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     MelcloudSensorEntityDescription(
         key="room_temperature",
@@ -177,7 +177,7 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda x: x.device.room_temperature,
         enabled=lambda x: True,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     MelcloudSensorEntityDescription(
         key="outside_temperature",
@@ -188,7 +188,18 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda x: x.device.outside_temperature,
         enabled=lambda x: True,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
+    ),
+    MelcloudSensorEntityDescription(
+        key="actual_supply_fan_speed",
+        name="Supply fan speed",
+        icon="mdi:fan-chevron-up",
+#        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+#        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda x: x.actual_supply_fan_speed,
+        enabled=lambda x: True,
+        entity_registry_enabled_default=True,
     ),
 )
 

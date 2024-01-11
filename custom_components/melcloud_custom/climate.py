@@ -98,15 +98,15 @@ ERV_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
     v: k for k, v in ERV_MODE_LOOKUP.items()
 }
 
-ERV_FAN_MODE_LOOKUP: dict[int, str] = {
-    1: FAN_LOW,
-    2: FAN_MEDIUM,
-    3: FAN_HIGHT,
-    4: FAN_MAXIMUM,
-}
-ERV_FAN_MODE_REVERSE_LOOKUP: dict[str, int] = {
-    v: k for k, v in ERV_FAN_MODE_LOOKUP.items()
-}
+#ERV_FAN_MODE_LOOKUP: dict[int, str] = {
+#    1: FAN_LOW,
+#    2: FAN_MEDIUM,
+#    3: FAN_HIGHT,
+#    4: FAN_MAXIMUM,
+#}
+#ERV_FAN_MODE_REVERSE_LOOKUP: dict[str, int] = {
+#    v: k for k, v in ERV_FAN_MODE_LOOKUP.items()
+#}
 
 async def async_setup_entry(
     hass: HomeAssistantType, entry: ConfigEntry, async_add_entities
@@ -488,47 +488,19 @@ class ErvDeviceClimate(MelCloudClimate):
             ERV_MODE_LOOKUP.get(mode) for mode in self._device.ventilation_modes
         ]
 
- #   @property
- #   def fan_mode(self) -> str | None:
- #       """Return the fan setting."""
- #       return self._device.fan_speed
-
- #   async def async_set_fan_mode(self, fan_mode: str) -> None:
- #       """Set new target fan mode."""
- #       await self.api.async_set({erv.PROPERTY_FAN_SPEED: fan_mode})
-
- #   @property
- #   def fan_modes(self) -> list[str] | None:
- #       """Return the list of available fan modes."""
- #       return self._device.fan_speeds
     @property
-    def fan_mode(self):
-        """Return fan mode."""
-        f_mode = self._device.fan_speed
-        return ERV_FAN_MODE_LOOKUP.get(f_mode, str)
-
-    def _apply_set_fan_mode(
-        self, fan_mode: str, set_dict: dict[str, Any]
-    ) -> None:
-        """Apply hvac mode changes to a dict used to call _device.set."""
-
-        fan_speed = ERV_FAN_MODE_REVERSE_LOOKUP.get(str)
-        if fan_speed is None:
-            raise ValueError(f"Invalid fan_mode [{fan_mode}]")
-
-        set_dict[erv.PROPERTY_FAN_SPEED] = fan_speed
-
+    def fan_mode(self) -> str | None:
+        """Return the fan setting."""
+        return self._device.fan_speed
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         """Set new target fan mode."""
-        set_dict = {}
-        self._apply_set_fan_mode(fan_mode, set_dict)
-        await self.api.async_set(set_dict)
+        await self.api.async_set({erv.PROPERTY_FAN_SPEED: fan_mode})
 
     @property
-    def fan_modes(self) -> list[str]:
-        """Return the list of available fan_modes."""
-        return [ERV_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds]
+    def fan_modes(self) -> list[str] | None:
+        """Return the list of available fan modes."""
+        return self._device.fan_speeds
 
     @property
     def supported_features(self) -> int:

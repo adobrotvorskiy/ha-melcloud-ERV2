@@ -507,20 +507,20 @@ class ErvDeviceClimate(MelCloudClimate):
     def fan_mode(self) -> str | None:
         """Return the fan setting."""
         f_mode = self._device.fan_speed
-        return ERV_FAN_MODE_LOOKUP.get(f_mode, fan_mode)
+        return ERV_FAN_MODE_LOOKUP.get(f_mode)
 
     def _apply_set_fan_mode(
         self, fan_mode: str, set_dict: dict[str, Any]
     ) -> None:
         """Apply fan mode changes to a dict used to call _device.set."""
 
-        fan_mode = ERV_FAN_MODE_REVERSE_LOOKUP.get(fan_mode)
+        fan_mode = ERV_FAN_MODE_REVERSE_LOOKUP.get(f_mode)
         if fan_mode is None:
-            raise ValueError(f"Invalid hvac_mode [{fan_mode}]")
+            raise ValueError(f"Invalid fan_mode [{f_mode}]")
 
         set_dict[erv.PROPERTY_FAN_MODE] = fan_mode
 
-    async def async_set_fan_mode(self, fan_mode:'FUN_OFF') -> None:
+    async def async_set_fan_mode(self, fan_mode) -> None:
         """Set new target fan mode."""
         set_dict = {}
         self._apply_set_fan_mode(fan_mode, set_dict)
@@ -530,7 +530,7 @@ class ErvDeviceClimate(MelCloudClimate):
     def fan_modes(self) -> list[str] | None:
         """Return the list of available fan modes."""
         return [
-            ATA_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds
+            ERV_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds
         ]
 
     @property

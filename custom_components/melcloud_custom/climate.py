@@ -488,19 +488,50 @@ class ErvDeviceClimate(MelCloudClimate):
             ERV_MODE_LOOKUP.get(mode) for mode in self._device.ventilation_modes
         ]
 
+ #   @property
+ #   def fan_mode(self) -> str | None:
+ #       """Return the fan setting."""
+ #       return self._device.fan_speed
+
+ #   async def async_set_fan_mode(self, fan_mode: str) -> None:
+ #       """Set new target fan mode."""
+ #       await self.api.async_set({erv.PROPERTY_FAN_SPEED: fan_mode})
+
+ #   @property
+ #   def fan_modes(self) -> list[str] | None:
+ #       """Return the list of available fan modes."""
+ #       return self._device.fan_speeds
+
+
     @property
     def fan_mode(self) -> str | None:
         """Return the fan setting."""
-        return self._device.fan_speed
+        f_mode = self._device.fan_speed
+        return ERV_FAN_MODE_LOOKUP.get(f_mode, str)
 
-    async def async_set_fan_mode(self, fan_mode: str) -> None:
+    def _apply_set_fan_mode(
+        self, fan_mode: str, set_dict: dict[str, Any]
+    ) -> None:
+        """Apply fan mode changes to a dict used to call _device.set."""
+
+        fan_mode = ERV_FAN_MODE_REVERSE_LOOKUP.get(fan_mode)
+        if fan_mode is None:
+            raise ValueError(f"Invalid hvac_mode [{fan_mode}]")
+
+        set_dict[erv.PROPERTY_FAN_MODE] = fan_mode
+
+    async def async_set_fan_mode(self, str) -> None:
         """Set new target fan mode."""
-        await self.api.async_set({erv.PROPERTY_FAN_SPEED: fan_mode})
+        set_dict = {}
+        self._apply_set_fan_mode(fan_mode, set_dict)
+        await self.api.async_set(set_dict)
 
     @property
-    def fan_modes(self) -> list[str] | None:
+    def fan_modes(self) -> list[str] | None
         """Return the list of available fan modes."""
-        return self._device.fan_speeds
+        return [
+            ATA_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds
+        ]
 
     @property
     def supported_features(self) -> int:

@@ -528,5 +528,4 @@ class ErvDeviceClimate(MelCloudClimate):
     @property
     def fan_modes(self) -> list[str]:
         """Return the list of available fan_modes."""
-        return
-            [ERV_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds]
+        return [ERV_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds]

@@ -10,6 +10,7 @@ ATTR_VANE_VERTICAL = "vane_vertical"
 ATTR_VANE_HORIZONTAL = "vane_horizontal"
 ATTR_ERV_MODE = "erv_mode"
 
+FAN_LOW = "FAN_LOW"
 
 class HorSwingModes:
     """Horizontal swing modes names."""

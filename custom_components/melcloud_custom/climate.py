@@ -503,7 +503,7 @@ class ErvDeviceClimate(MelCloudClimate):
  #       return self._device.fan_speeds
 
 
-@property
+    @property
     def fan_mode(self) -> str | None:
         """Return the fan setting."""
         f_mode = self._device.fan_speed

@@ -527,7 +527,7 @@ class ErvDeviceClimate(MelCloudClimate):
         await self.api.async_set(set_dict)
 
     @property
-    def fan_modes(self) -> list[str] | None
+    def fan_modes(self) -> list[str] | None:
         """Return the list of available fan modes."""
         return [
             ATA_FAN_MODE_LOOKUP.get(speed) for speed in self._device.fan_speeds

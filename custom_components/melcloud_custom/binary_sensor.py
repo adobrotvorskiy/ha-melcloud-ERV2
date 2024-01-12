@@ -88,6 +88,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
             for mel_device in mel_devices[DEVICE_TYPE_ATA]
             if description.enabled(mel_device)
         ]
+        + [
+            MelDeviceBinarySensor(mel_device, description)
+            for description in ERV_BINARY_SENSORS
+            for mel_device in mel_devices[DEVICE_TYPE_ERV]
+            if description.enabled(mel_device)
+        ]
     )
     async_add_entities(entities, False)
 

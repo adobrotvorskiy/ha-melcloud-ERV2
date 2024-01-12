@@ -37,7 +37,6 @@ from .const import (
     MEL_DEVICES,
     HorSwingModes,
     VertSwingModes,
-    ErvModes,
 )
 
 ATA_HVAC_MODE_LOOKUP: dict[str, HVACMode] = {

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import logging
 from typing import Any, Callable
 
-from pymelcloud import DEVICE_TYPE_ATA
+from pymelcloud import DEVICE_TYPE_ATA, DEVICE_TYPE_ERV
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
@@ -43,6 +43,34 @@ ATA_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
     ),
 )
 
+ATA_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
+    MelcloudBinarySensorEntityDescription(
+        key="core_maintenance_required",
+        name="Core maintenance required",
+        icon="mdi:account-wrench",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda x: x.device.core_maintenance_required,
+        enabled=lambda x: True,
+        entity_registry_enabled_default=True,
+    ),
+    MelcloudBinarySensorEntityDescription(
+        key="filter_maintenance_required",
+        name="Filter maintenance required",
+        icon="mdi:air-filter",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda x: x.device.core_maintenance_required,
+        enabled=lambda x: True,
+        entity_registry_enabled_default=True,
+    ),
+    MelcloudBinarySensorEntityDescription(
+        key="error_state",
+        name="Error State",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda x: x.error_state,
+        enabled=lambda x: True,
+        entity_registry_enabled_default=True,
+    ),
+)
 
 _LOGGER = logging.getLogger(__name__)
 

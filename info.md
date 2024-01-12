@@ -1,5 +1,5 @@
 # MELCloud HomeAssistant custom component
-A full featured Homeassistant custom component to drive MELCloud ATA and ATW devices.
+A full featured Homeassistant custom component to drive MELCloud ATA, ATW and ERV devices.
 
 This custom component is based on the native Home Assistant [MELCloud component](https://github.com/home-assistant/core/tree/dev/homeassistant/components/melcloud) released with version 0.106 and on the same underlying [PyMelCloud library](https://github.com/vilppuvuorinen/pymelcloud).
 

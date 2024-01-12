@@ -43,6 +43,17 @@ ATA_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
     ),
 )
 
+ERV_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
+    MelcloudBinarySensorEntityDescription(
+        key="error_state",
+        name="Error State",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda x: x.error_state,
+        enabled=lambda x: True,
+    ),
+)
+
+
 _LOGGER = logging.getLogger(__name__)
 
 

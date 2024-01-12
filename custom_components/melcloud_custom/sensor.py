@@ -208,24 +208,6 @@ ERV_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
         enabled=lambda x: True,
         entity_registry_enabled_default=True,
     ),
-    MelcloudSensorEntityDescription(
-        key="core_maintenance_required",
-        name="Core maintenance required",
-        icon="mdi:account-wrench",
-        state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda x: x.device.core_maintenance_required,
-        enabled=lambda x: True,
-        entity_registry_enabled_default=True,
-    ),
-    MelcloudSensorEntityDescription(
-        key="filter_maintenance_required",
-        name="Filter maintenance required",
-        icon="mdi:air-filter",
-        state_class=SensorStateClass.MEASUREMENT,
-        value_fn=lambda x: x.device.core_maintenance_required,
-        enabled=lambda x: True,
-        entity_registry_enabled_default=True,
-    ),
 )
 
 

@@ -43,7 +43,7 @@ ATA_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
     ),
 )
 
-ATA_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
+ERV_BINARY_SENSORS: tuple[MelcloudBinarySensorEntityDescription, ...] = (
     MelcloudBinarySensorEntityDescription(
         key="core_maintenance_required",
         name="Core maintenance required",

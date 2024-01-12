@@ -10,7 +10,6 @@ ATTR_VANE_VERTICAL = "vane_vertical"
 ATTR_VANE_HORIZONTAL = "vane_horizontal"
 ATTR_ERV_MODE = "erv_mode"
 
-FAN_LOW = "FAN_LOW"
 
 class HorSwingModes:
     """Horizontal swing modes names."""
@@ -35,14 +34,6 @@ class VertSwingModes:
     MiddleBottom = "VerticalMiddleBottom"
     Bottom = "VerticalBottom"
     Swing = "VerticalSwing"
-
-class ErvModes:
-    """Energy recovery ventilation modes names."""
-
-    Auto = "Auto"
-    Recovery = "Recovery"
-    ByPass = "ByPass"
-    Undefined = "Undefined"
 
 class Language:
     """Melcloud languages."""

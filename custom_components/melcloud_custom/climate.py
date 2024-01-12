@@ -98,16 +98,6 @@ ERV_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
     v: k for k, v in ERV_MODE_LOOKUP.items()
 }
 
-ERV_FAN_MODE_LOOKUP: dict[int, str] = {
-    1: "FAN_LOW",
-    2: "FAN_MEDIUM",
-    3: "FAN_HIGHT",
-    4: "FAN_MAXIMUM",
-}
-ERV_FAN_MODE_REVERSE_LOOKUP: dict[str, int] = {
-    v: k for k, v in ERV_FAN_MODE_LOOKUP.items()
-}
-
 async def async_setup_entry(
     hass: HomeAssistantType, entry: ConfigEntry, async_add_entities
 ):
@@ -437,20 +427,6 @@ class ErvDeviceClimate(MelCloudClimate):
         self._attr_unique_id = f"{erv_device.serial}-{erv_device.mac}"
         self._attr_device_info = device.device_info
 
-
- #   @property
- #   def extra_state_attributes(self) -> dict[str, Any] | None:
- #       """Return the optional state attributes with device specific additions."""
- #       attr = {}
-
- #       erv_mode = self._device.erv_mode
- #       if erv_mode:
- #           attr.update(
- #               {ATTR_ERV_MODE: ERV_MODE_LOOKUP.get(erv_mode, None)}
- #           )
-
- #       return attr
-
     @property
     def hvac_mode(self) -> HVACMode:
         """Return erv mode."""
@@ -501,9 +477,6 @@ class ErvDeviceClimate(MelCloudClimate):
     def fan_modes(self) -> list[str] | None:
         """Return the list of available fan modes."""
         return self._device.fan_speeds
-
-
-
 
     @property
     def supported_features(self) -> int:

@@ -7,4 +7,4 @@ pre-commit==3.0.0
 flake8==6.0.0
 isort==5.12.0
 black==23.1.0
-pymelcloud_erv==2.5.11-erv
+pymelcloud_erv @ git+https://github.com/adobrotvorskiy/pymelcloud_erv

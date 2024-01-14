@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from pymelcloud_erv import DEVICE_TYPE_ATW, AtwDevice
-from pymelcloud_erv.atw_device import (
+from pymelclouderv import DEVICE_TYPE_ATW, AtwDevice
+from pymelclouderv.atw_device import (
     PROPERTY_OPERATION_MODE,
     PROPERTY_TARGET_TANK_TEMPERATURE,
 )

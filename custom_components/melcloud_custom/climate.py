@@ -3,16 +3,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from pymelcloud_erv import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, DEVICE_TYPE_ERV, AtaDevice, AtwDevice, ErvDevice
-import pymelcloud_erv.ata_device as ata
-import pymelcloud_erv.atw_device as atw
-import pymelcloud_erv.erv_device as erv
-from pymelcloud_erv.atw_device import (
+from pymelclouderv import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, DEVICE_TYPE_ERV, AtaDevice, AtwDevice, ErvDevice
+import pymelclouderv.ata_device as ata
+import pymelclouderv.atw_device as atw
+import pymelclouderv.erv_device as erv
+from pymelclouderv.atw_device import (
     PROPERTY_ZONE_1_OPERATION_MODE,
     PROPERTY_ZONE_2_OPERATION_MODE,
     Zone,
 )
-from pymelcloud_erv.device import PROPERTY_POWER
+from pymelclouderv.device import PROPERTY_POWER
 
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate.const import (

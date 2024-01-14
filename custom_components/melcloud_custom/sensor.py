@@ -5,8 +5,8 @@ from dataclasses import dataclass
 import logging
 from typing import Any, Callable
 
-from pymelcloud import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, DEVICE_TYPE_ERV
-from pymelcloud.atw_device import Zone
+from pymelcloud_erv import DEVICE_TYPE_ATA, DEVICE_TYPE_ATW, DEVICE_TYPE_ERV
+from pymelcloud_erv.atw_device import Zone
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,

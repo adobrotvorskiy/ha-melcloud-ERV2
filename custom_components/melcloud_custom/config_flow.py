@@ -5,7 +5,7 @@ import logging
 
 from aiohttp import ClientError, ClientResponseError
 from async_timeout import timeout
-import pymelcloud
+import pymelclouderv
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_TOKEN, CONF_USERNAME

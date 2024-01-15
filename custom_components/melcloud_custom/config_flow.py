@@ -49,7 +49,7 @@ class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 token = await self._test_authorization(username, password, language)
                 if not token:
                     return self._show_form({"base": "invalid_auth"})
-                await pymelcloud.get_devices(
+                await pymelclouderv.get_devices(
                     token,
                     async_get_clientsession(self.hass),
                 )

@@ -8,7 +8,7 @@ from pymelclouderv.atw_device import (
     PROPERTY_OPERATION_MODE,
     PROPERTY_TARGET_TANK_TEMPERATURE,
 )
-from pymelcloud_erv.device import PROPERTY_POWER
+from pymelclouderv.device import PROPERTY_POWER
 
 from homeassistant.components.water_heater import (
     DEFAULT_MAX_TEMP,

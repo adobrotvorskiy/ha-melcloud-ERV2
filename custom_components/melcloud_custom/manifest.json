@@ -7,6 +7,6 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/adobrotvorskiy/ha-melcloud-ERV/issues",
-  "requirements": ["git+https://github.com/adobrotvorskiy/pymelclouderv@releases/tag/v2.11.2"],
+  "requirements": ["git+https://github.com/adobrotvorskiy/pymelclouderv"],
   "version": "1.4"
 }

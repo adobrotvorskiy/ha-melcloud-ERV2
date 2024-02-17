@@ -3,12 +3,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from pymelclouderv import DEVICE_TYPE_ATW, AtwDevice
-from pymelclouderv.atw_device import (
+from pymelcloud import DEVICE_TYPE_ATW, AtwDevice
+from pymelcloud.atw_device import (
     PROPERTY_OPERATION_MODE,
     PROPERTY_TARGET_TANK_TEMPERATURE,
 )
-from pymelclouderv.device import PROPERTY_POWER
+from pymelcloud.device import PROPERTY_POWER
 
 from homeassistant.components.water_heater import (
     DEFAULT_MAX_TEMP,

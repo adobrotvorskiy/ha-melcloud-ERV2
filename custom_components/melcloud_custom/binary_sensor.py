@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import logging
 from typing import Any, Callable
 
-from pymelclouderv import DEVICE_TYPE_ATA, DEVICE_TYPE_ERV
+from pymelcloud import DEVICE_TYPE_ATA, DEVICE_TYPE_ERV
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,

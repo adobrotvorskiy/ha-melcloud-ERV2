@@ -5,7 +5,7 @@ import logging
 
 from aiohttp import ClientError, ClientResponseError
 from async_timeout import timeout
-import pymelclouderv
+import pymelcloud
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_TOKEN, CONF_USERNAME
@@ -49,7 +49,7 @@ class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 token = await self._test_authorization(username, password, language)
                 if not token:
                     return self._show_form({"base": "invalid_auth"})
-                await pymelclouderv.get_devices(
+                await pymelcloud.get_devices(
                     token,
                     async_get_clientsession(self.hass),
                 )

@@ -8,9 +8,9 @@ from typing import Any, Dict, Optional
 
 from aiohttp import ClientConnectionError, ClientResponseError
 from async_timeout import timeout
-from pymelclouderv import Device, get_devices
-from pymelclouderv.atw_device import Zone
-from pymelclouderv.client import BASE_URL
+from pymelcloud import Device, get_devices
+from pymelcloud.atw_device import Zone
+from pymelcloud.client import BASE_URL
 import voluptuous as vol
 
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry

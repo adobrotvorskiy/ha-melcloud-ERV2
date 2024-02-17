@@ -1,12 +1,12 @@
 {
   "domain": "melcloud_custom",
-  "name": "MELCloud Custom ERV",
+  "name": "MELCloud Custom ERV2",
   "codeowners": ["@adobrotvorskiy"],
   "config_flow": true,
-  "documentation": "https://github.com/adobrotvorskiy/ha-melcloud-ERV",
+  "documentation": "https://github.com/adobrotvorskiy/ha-melcloud-ERV2",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/adobrotvorskiy/ha-melcloud-ERV/issues",
+  "issue_tracker": "https://github.com/adobrotvorskiy/ha-melcloud-ERV2/issues",
   "requirements": ["pymelcloud==2.11"],
   "version": "1.8"
 }

@@ -52,7 +52,7 @@ ATTR_STATE_DEVICE_UNIT = [
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL = timedelta(seconds=60)
+SCAN_INTERVAL = timedelta(seconds=240)
 
 PLATFORMS = [
     Platform.BINARY_SENSOR,

@@ -116,3 +116,4 @@ class AtwWaterHeater(CoordinatorEntity, WaterHeaterEntity):
     def max_temp(self) -> float:
         """Return the maximum temperature."""
         return self._device.target_tank_temperature_max or DEFAULT_MAX_TEMP
+

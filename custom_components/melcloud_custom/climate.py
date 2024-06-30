@@ -47,9 +47,9 @@ ATA_HVAC_MODE_LOOKUP = {
     ata.OPERATION_MODE_FAN_ONLY: HVACMode.FAN_ONLY,
     ata.OPERATION_MODE_HEAT_COOL: HVACMode.HEAT_COOL,
 }
-													 
+
 ATA_HVAC_MODE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_MODE_LOOKUP.items()}
- 
+
 
 
 ATA_HVAC_VVANE_LOOKUP = {
@@ -64,6 +64,7 @@ ATA_HVAC_VVANE_LOOKUP = {
 
 ATA_HVAC_VVANE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_VVANE_LOOKUP.items()}
 
+
 ATA_HVAC_HVANE_LOOKUP = {
     ata.H_VANE_POSITION_AUTO: HorSwingModes.Auto,
     ata.H_VANE_POSITION_1: HorSwingModes.Left,
@@ -77,9 +78,10 @@ ATA_HVAC_HVANE_LOOKUP = {
 
 ATA_HVAC_HVANE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_HVANE_LOOKUP.items()}
 
+
 ATW_ZONE_HVAC_MODE_LOOKUP = {
-    atw.ZONE_OPERATION_MODE_HEAT: HVACMode.HEAT,
-    atw.ZONE_OPERATION_MODE_COOL: HVACMode.COOL,
+    atw.ZONE_OPERATION_MODE_HEAT_FLOW: HVACMode.HEAT,
+    atw.ZONE_OPERATION_MODE_COOL_FLOW: HVACMode.COOL,
 }
 ATW_ZONE_HVAC_MODE_REVERSE_LOOKUP = {v: k for k, v in ATW_ZONE_HVAC_MODE_LOOKUP.items()}
 
@@ -101,6 +103,8 @@ ERV_MODE_LOOKUP = {
 }
 ERV_MODE_REVERSE_LOOKUP = {v: k for k, v in ERV_MODE_LOOKUP.items()
 }
+
+
 
 
 async def async_setup_entry(
@@ -483,7 +487,7 @@ class ErvDeviceClimate(MelCloudClimate):
         )
 
         return supp_feature
-	
+
     @property
     def hvac_modes(self) -> list[HVACMode]:
         """Return the list of available hvac ventilation_modes."""

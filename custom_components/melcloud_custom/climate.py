@@ -20,6 +20,7 @@ from homeassistant.components.climate.const import (
     DEFAULT_MAX_TEMP,
     DEFAULT_MIN_TEMP,
     ClimateEntityFeature,
+	HVACAction,		   
     HVACMode,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -39,19 +40,19 @@ from .const import (
     VertSwingModes,
 )
 
-ATA_HVAC_MODE_LOOKUP: dict[str, HVACMode] = {
+ATA_HVAC_MODE_LOOKUP = {
     ata.OPERATION_MODE_HEAT: HVACMode.HEAT,
     ata.OPERATION_MODE_DRY: HVACMode.DRY,
     ata.OPERATION_MODE_COOL: HVACMode.COOL,
     ata.OPERATION_MODE_FAN_ONLY: HVACMode.FAN_ONLY,
     ata.OPERATION_MODE_HEAT_COOL: HVACMode.HEAT_COOL,
 }
-ATA_HVAC_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
-    v: k for k, v in ATA_HVAC_MODE_LOOKUP.items()
-}
+													 
+ATA_HVAC_MODE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_MODE_LOOKUP.items()}
+ 
 
 
-ATA_HVAC_VVANE_LOOKUP: dict[str, str] = {
+ATA_HVAC_VVANE_LOOKUP = {
     ata.V_VANE_POSITION_AUTO: VertSwingModes.Auto,
     ata.V_VANE_POSITION_1: VertSwingModes.Top,
     ata.V_VANE_POSITION_2: VertSwingModes.MiddleTop,
@@ -60,12 +61,12 @@ ATA_HVAC_VVANE_LOOKUP: dict[str, str] = {
     ata.V_VANE_POSITION_5: VertSwingModes.Bottom,
     ata.V_VANE_POSITION_SWING: VertSwingModes.Swing,
 }
-ATA_HVAC_VVANE_REVERSE_LOOKUP: dict[str, str] = {
-    v: k for k, v in ATA_HVAC_VVANE_LOOKUP.items()
-}
+												 
+ATA_HVAC_VVANE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_VVANE_LOOKUP.items()}
+ 
 
 
-ATA_HVAC_HVANE_LOOKUP: dict[str, str] = {
+ATA_HVAC_HVANE_LOOKUP = {
     ata.H_VANE_POSITION_AUTO: HorSwingModes.Auto,
     ata.H_VANE_POSITION_1: HorSwingModes.Left,
     ata.H_VANE_POSITION_2: HorSwingModes.MiddleLeft,
@@ -75,27 +76,38 @@ ATA_HVAC_HVANE_LOOKUP: dict[str, str] = {
     ata.H_VANE_POSITION_SPLIT: HorSwingModes.Split,
     ata.H_VANE_POSITION_SWING: HorSwingModes.Swing,
 }
-ATA_HVAC_HVANE_REVERSE_LOOKUP: dict[str, str] = {
-    v: k for k, v in ATA_HVAC_HVANE_LOOKUP.items()
-}
+												 
+ATA_HVAC_HVANE_REVERSE_LOOKUP = {v: k for k, v in ATA_HVAC_HVANE_LOOKUP.items()}
+ 
 
 
-ATW_ZONE_HVAC_MODE_LOOKUP: dict[str, HVACMode] = {
-    atw.ZONE_OPERATION_MODE_HEAT_FLOW: HVACMode.HEAT,
-    atw.ZONE_OPERATION_MODE_COOL_FLOW: HVACMode.COOL,
+ATW_ZONE_HVAC_MODE_LOOKUP = {
+    atw.ZONE_OPERATION_MODE_HEAT: HVACMode.HEAT,
+    atw.ZONE_OPERATION_MODE_COOL: HVACMode.COOL,
 }
-ATW_ZONE_HVAC_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
-    v: k for k, v in ATW_ZONE_HVAC_MODE_LOOKUP.items()
-}
+ATW_ZONE_HVAC_MODE_REVERSE_LOOKUP = {v: k for k, v in ATW_ZONE_HVAC_MODE_LOOKUP.items()}
 
-ERV_MODE_LOOKUP: dict[str, HVACMode] = {
+ATW_ZONE_HVAC_ACTION_LOOKUP = {
+    atw.STATUS_IDLE: HVACAction.IDLE,
+    atw.STATUS_HEAT_ZONES: HVACAction.HEATING,
+    atw.STATUS_COOL: HVACAction.COOLING,
+    atw.STATUS_STANDBY: HVACAction.IDLE,
+    # Heating water tank, so the zone is idle
+    atw.STATUS_HEAT_WATER: HVACAction.IDLE,
+    atw.STATUS_LEGIONELLA: HVACAction.IDLE,
+    # Heat pump cannot heat in this mode, but will be ready soon
+    atw.STATUS_DEFROST: HVACAction.PREHEATING,
+}
+ERV_MODE_LOOKUP = {
     erv.VENTILATION_MODE_RECOVERY: HVACMode.HEAT_COOL,
     erv.VENTILATION_MODE_AUTO: HVACMode.AUTO,
     erv.VENTILATION_MODE_BYPASS: HVACMode.FAN_ONLY,
 }
-ERV_MODE_REVERSE_LOOKUP: dict[HVACMode, str] = {
-    v: k for k, v in ERV_MODE_LOOKUP.items()
+ERV_MODE_REVERSE_LOOKUP = {v: k for k, v in ERV_MODE_LOOKUP.items()
 }
+
+
+
 
 async def async_setup_entry(
     hass: HomeAssistantType, entry: ConfigEntry, async_add_entities
@@ -131,6 +143,7 @@ class MelCloudClimate(CoordinatorEntity, ClimateEntity):
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_has_entity_name = True
     _attr_name = None
+    _enable_turn_on_off_backwards_compatibility = False													   
 
     def __init__(self, device: MelCloudDevice):
         """Initialize the climate."""
@@ -159,6 +172,20 @@ class AtaDeviceClimate(MelCloudClimate):
         self._set_hor_swing = self._support_hor_swing and not self._support_ver_swing
 
     @property
+    def supported_features(self) -> ClimateEntityFeature:
+        """Return the list of supported features."""
+        supp_feature = (
+            ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        )
+        if self._support_ver_swing or self._support_hor_swing:
+            supp_feature |= ClimateEntityFeature.SWING_MODE
+
+        return supp_feature
+
+    @property			 
     def extra_state_attributes(self) -> dict[str, Any] | None:
         """Return the optional state attributes with device specific additions."""
         attr = {}
@@ -313,17 +340,6 @@ class AtaDeviceClimate(MelCloudClimate):
         await self.api.async_set({PROPERTY_POWER: False})
 
     @property
-    def supported_features(self) -> int:
-        """Return the list of supported features."""
-        supp_feature = (
-            ClimateEntityFeature.FAN_MODE | ClimateEntityFeature.TARGET_TEMPERATURE
-        )
-        if self._support_ver_swing or self._support_hor_swing:
-            supp_feature |= ClimateEntityFeature.SWING_MODE
-
-        return supp_feature
-
-    @property
     def min_temp(self) -> float:
         """Return the minimum temperature."""
         min_value = self._device.target_temperature_min
@@ -400,6 +416,13 @@ class AtwDeviceZoneClimate(MelCloudClimate):
         return [self.hvac_mode]
 
     @property
+    def hvac_action(self) -> HVACAction | None:
+        """Return the current running hvac operation."""
+        if not self._device.power:
+            return HVACAction.OFF
+        return ATW_ZONE_HVAC_ACTION_LOOKUP.get(self._device.status)
+
+    @property			 
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
         return self._zone.room_temperature
@@ -457,6 +480,17 @@ class ErvDeviceClimate(MelCloudClimate):
         await self.api.async_set(set_dict)
 
     @property
+    def supported_features(self) -> ClimateEntityFeature:
+        """Return the list of supported features."""
+        supp_feature = (
+            ClimateEntityFeature.FAN_MODE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        )
+
+        return supp_feature
+	
+	@property
     def hvac_modes(self) -> list[HVACMode]:
         """Return the list of available hvac ventilation_modes."""
         return [HVACMode.OFF] + [
@@ -477,12 +511,5 @@ class ErvDeviceClimate(MelCloudClimate):
         """Return the list of available fan modes."""
         return self._device.fan_speeds
 
-    @property
-    def supported_features(self) -> int:
-        """Return the list of supported features."""
-        supp_feature = (
-            ClimateEntityFeature.FAN_MODE
-        )
 
-        return supp_feature
 
